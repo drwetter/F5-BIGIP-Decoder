@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # Script to find out private IPs and other stuff from BIGIP F5 LB
-# Detection based on the URLs mentioned and on private experiences over the years
+# Detection based on the URLs mentioned and on private experiences over the years.
+# The only known project which detects all flavors of F5 cookies. If something
+# is missing, pls send me a mail or file an issue at github.
 #
 # License: copyleft GPLv3, see https://www.gnu.org/licenses/gpl-3.0.en.html
 # Author:  Dirk Wetter (echo "qvex@grfgffy.fu" | tr a-zA-Z n-za-mN-ZA-M)
+# Updates via github: https://github.com/drwetter/F5-BIGIP-Decoder
 
 SIDEBYSIDE=${SIDEBYSIDE:-true}
 DEBUG=${DEBUG:-false}
@@ -100,7 +103,7 @@ hex2ip6() {
 determine_routeddomain() {
 	local tmp
 
-	"$DEBUG" && echo "len is ${$1}"
+	"$DEBUG" && echo "len is ${#1}"
 	tmp="${1%%o*}"
 	"$DEBUG" && echo "${tmp/rd/}" 1>&2
 	echo "${tmp/rd/}"
@@ -168,7 +171,7 @@ while true; do IFS='=' read cookiename cookie
 		offset=$(( 2 + ${#routed_domain} + 1 + 24))  && \
 		port="${cookie##*o}" && \
 		ip="$(hex2ip "${cookie:$offset:8}")" && \
-          output "${ip}:${port}" "IPv4 pool members in routed domains" "$cookiename" "$cookie" && \
+          output "${ip}:${port}" "IPv4 pool members in routed domain $routed_domain" "$cookiename" "$cookie" && \
 		savedcookies="${savedcookies}    ${cookiename}=${cookie}\n" && \
           i=$((i +1)) && \
           continue
@@ -185,7 +188,7 @@ while true; do IFS='=' read cookiename cookie
 		offset=$(( 2 + ${#routed_domain} + 1 ))  && \
 		port="${cookie##*o}" && \
 		ip="$(hex2ip6 ${cookie:$offset:32})" && \
-          output "${ip}:${port}" "IPv6 pool members in routed domains" "$cookiename" "$cookie" && \
+          output "${ip}:${port}" "IPv6 pool members in routed domain $routed_domain" "$cookiename" "$cookie" && \
 		savedcookies="${savedcookies}    ${cookiename}=${cookie}\n" && \
           i=$((i +1)) && \
           continue
@@ -250,5 +253,5 @@ if [ -n $named_bigip ] ; then
 	echo
 fi
 
-#  $Id: f5_bigip_decoder.sh,v 1.18 2017/08/24 18:39:16 dirkw Exp $
+#  $Id: f5_bigip_decoder.sh,v 1.19 2017/09/21 08:10:03 dirkw Exp $
 #  vim:ts=5:sw=5
