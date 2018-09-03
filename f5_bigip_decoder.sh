@@ -166,7 +166,7 @@ while true; do IFS='=' read cookiename cookie
 		savedcookies="${savedcookies}    ${cookiename}=${cookie}\n" && \
           i=$((i +1)) && \
           continue
-     grep -q -E '^rd[0-9]{1,2}o0{20}f{4}[a-f0-9]{8}o[0-9]{1,5}' <<< "$cookie" && \
+     grep -q -E '^rd[0-9]{1,3}o0{20}f{4}[a-f0-9]{8}o[0-9]{1,5}' <<< "$cookie" && \
 		routed_domain="$(determine_routeddomain "$cookie")" && \
 		offset=$(( 2 + ${#routed_domain} + 1 + 24))  && \
 		port="${cookie##*o}" && \
@@ -183,7 +183,7 @@ while true; do IFS='=' read cookiename cookie
 		savedcookies="${savedcookies}    ${cookiename}=${cookie}\n" && \
           i=$((i +1)) && \
           continue
-     grep -q -E '^rd[0-9]{1,2}o[a-f0-9]{32}o[0-9]{1,5}' <<< "$cookie" && \
+     grep -q -E '^rd[0-9]{1,3}o[a-f0-9]{32}o[0-9]{1,5}' <<< "$cookie" && \
 		routed_domain="$(determine_routeddomain "$cookie")" && \
 		offset=$(( 2 + ${#routed_domain} + 1 ))  && \
 		port="${cookie##*o}" && \
@@ -253,5 +253,5 @@ if [ -n $named_bigip ] ; then
 	echo
 fi
 
-#  $Id: f5_bigip_decoder.sh,v 1.19 2017/09/21 08:10:03 dirkw Exp $
+#  $Id: f5_bigip_decoder.sh,v 1.20 2018/09/03 11:09:09 dirkw Exp $
 #  vim:ts=5:sw=5
