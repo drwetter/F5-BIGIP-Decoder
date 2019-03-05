@@ -42,7 +42,7 @@ elif [ -z "$1" ]; then
 elif grep -q '=' <<< "$1"; then
 	# just one cookie supplied as key=value, so we mimick the header:
 	HEADER=$(cat <<EOF
-Set-Cookie: "$1"
+Set-Cookie: $1
 EOF
 )
 elif grep -Ewq '^http|^https|com$|org$|net$|sh$|de$' <<< "$1"; then
