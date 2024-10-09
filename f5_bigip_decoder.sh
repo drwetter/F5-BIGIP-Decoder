@@ -159,7 +159,7 @@ while true; do IFS='=' read cookiename cookie
      [[ -z "$cookie" ]] && break
      cookie=${cookie/;/}
      "$DEBUG" && echo $cookiename : $cookie
-     grep -q -E '[0-9]{9,10}\.[0-9]{3,5}\.0000' <<< "$cookie" && \
+     grep -q -E '[0-9]{8,10}\.[0-9]{3,5}\.0000' <<< "$cookie" && \
 		ip="$(ip_oldstyle "$cookie")" && \
 		port="$(port_decode $cookie)" &&  \
 		output "${ip}:${port}" "default IPv4 pool members" "$cookiename" "$cookie" && \
